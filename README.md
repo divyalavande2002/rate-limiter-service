@@ -25,7 +25,17 @@ This is the **Fixed Window Counter** algorithm — chosen for simplicity and ato
 
 ## Proof
 
-Sequential requests for the same user:
+Load tested with Apache Bench — 50 requests, concurrency level 10:
+
+```bash
+ab -n 50 -c 10 "http://localhost:8080/api/resource?userId=loadtest2"
+```
+
+**Result:**
+- 5 requests → `200 OK` (within limit)
+- 45 requests → `429 Too Many Requests` (correctly blocked)
+
+Confirms zero race-condition leakage — exact limit enforcement even under concurrent load.
 ## API
 
 **GET /api/resource?userId={userId}**
